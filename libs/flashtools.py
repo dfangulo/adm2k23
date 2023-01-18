@@ -1,4 +1,23 @@
+import os
+import shutil
 from libs import conn_db
+from smb.SMBConnection import SMBConnection
+
+#variables>
+info_local_files = {
+    'flashtool_path' : '.\\flashtool\\'
+}
+info_server = {
+    'server': {
+        'name': 'WIN-JCJ6O9DP4T7',
+        'ip': '192.168.2.100'
+    },
+    'username': 'oa3admin',
+    'password': 'OA#2020$',
+    'share': 'server',
+    'flashtool_path' : '\\flashtool\\'
+    #\\192.168.2.100\server\flashtool
+}
 
 # Funcion para agregar una nueva flash_tool
 def agregar_flash_tool(flash_id, nombre, ejecutable, ruta_folder, grabar_llave, borrar_llave):
@@ -52,3 +71,48 @@ def obtener_ruta_folder(flash_id): #obtener el path de los flashadores
     mycursor.close()
     mydb.close()
     return ruta_folder
+
+def copy_folder_to_server(new_folder):
+    source_folder_path = info_local_files['flashtool_path'] + new_folder
+    destination_folder_path = '\\\\' + \
+    info_server['server']['ip'] + '\\' + \
+    info_server['share'] + info_server['flashtool_path']  + new_folder
+    try:
+        conn = SMBConnection(info_server['username'], info_server['password'], "localhost",
+                             info_server['server']['name'], use_ntlm_v2=True)
+        conn.connect(info_server['server']['ip'], 139)
+        
+        folder_name = os.path.basename(new_folder)
+        print(folder_name)
+        if folder_name in [entry.filename for entry in conn.listPath(info_server['share'], info_server['flashtool_path'] )]:
+            print(
+                f"The folder {folder_name} already exists in {info_server['flashtool_path']}")
+        else:
+            # copy the folder to server
+            shutil.copytree(source_folder_path, destination_folder_path)
+            print(
+                f"Folder {folder_name} copied successfully to {info_server['flashtool_path']}")
+    except Exception as e:
+        print(f'Error {e}')
+        conn.close()
+    conn.close()
+    return destination_folder_path
+
+def local_flashtool_folders(): # imprimir una lista de los flashadores en el folder ./flashtool
+    folder_list = os.listdir(info_local_files['flashtool_path'])
+    for folder in folder_list:
+        print(folder)
+        
+def local_files_flashtool(folder): # listar los archivos para selecionar el ejecutable
+    dir_path = info_local_files['flashtool_path'] + folder
+    if os.path.exists(dir_path):
+        files = [file for file in os.listdir(dir_path) if file.endswith(".exe")]
+
+        if files:
+            print("List of exe files:")
+            for file in files:
+                print(f"- {os.path.basename(file)}")
+        else:
+            print("No exe files found in the directory.")
+    else:
+        print(f"The directory {dir_path} does not exist.")
