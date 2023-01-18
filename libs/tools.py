@@ -13,3 +13,7 @@ def pause():
     """Hace una pausa en el programa y espera a que el usuario presione enter."""
     input("Presione Enter para continuar...")
     time.sleep(1)
+    
+def increment_number(number):
+    number = str(int(number) + 1).zfill(len(number))
+    return number
