@@ -1,8 +1,7 @@
-from libs import tools
-from app import app_menu, app_main
+from app import app_menu
 from views import menu
 
-    
+
 while True:
     menu.menu_top()
     menu.menu_opciones_principal()
@@ -10,23 +9,18 @@ while True:
     if opcion == '1':
         # Menu Produccion
         app_menu.submenu_produccion()
-        tools.pause()
     elif opcion == '2':
         # Menu Administrar
-
-        tools.pause()
+        app_menu.submenu_administrar()
     elif opcion == '3':
         # Menu Consultas
-
-        tools.pause()
+        app_menu.submenu_consultas()
     elif opcion == '4':
         # Menu Busquedas
-
-        tools.pause()
+        app_menu.submenu_busquedas()
     elif opcion == '5':
         # Menu Ayuda
-
-        tools.pause()
+        app_menu.submenu_ayuda()
     elif opcion == 'q':
         break
     else:

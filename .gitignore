@@ -8,3 +8,4 @@ flashtool/
 *.spec
 *.cfg
 *.txt
+*.rst

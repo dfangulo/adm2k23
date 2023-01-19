@@ -93,8 +93,8 @@ def agregar_modelo():  # Agregar un modelo, se necesitan modelo, flash_id, scree
         modelos.agregar_modelo(flash_id, modelo, screen_size)
 
 
-def mostrar_modelos():
+def mostrar_modelos(): #Mostrar una lista de los modelos actuales
     modelos.mostrar_modelos()
     
-def mostrar_flash_tools():
+def mostrar_flash_tools():# Mostar una lista de flashadores actuales
     flashtools.mostrar_flash_tools()
