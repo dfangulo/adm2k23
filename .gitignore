@@ -3,6 +3,7 @@ dist/
 include/
 lib/
 Scripts/
+flashtool/
 */__pycache__
 *.spec
 *.cfg

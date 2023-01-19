@@ -1,12 +1,14 @@
 from libs import conn_db
 
 def importar_modelos(lista_modelos):
-    print(lista_modelos)
     for datos in lista_modelos:
         flash_id = datos[0]
         for modelo in datos[1:]:
-            agregar_modelo(flash_id, modelo)
-            print(f"Modelo {modelo} con flash_id {flash_id} agregado.")
+            modelo_info = modelo.split(";")
+            modelo_name = modelo_info[0]
+            screen_size = modelo_info[1]
+            agregar_modelo(flash_id, modelo_name, screen_size)
+            print(f"Modelo {modelo_name} con flash_id {flash_id} y tamaño de pantalla {screen_size} agregado.")
             
 
 def flash_id_desde_modelos(modelo): # Funcion para buscar un modelo y obtener el flash_id
@@ -21,11 +23,11 @@ def flash_id_desde_modelos(modelo): # Funcion para buscar un modelo y obtener el
     return flash_id
 
 
-def agregar_modelo(flash_id, modelo): # Funcion para agregar un nuevo modelo
+def agregar_modelo(flash_id, modelo, screen_size): # Funcion para agregar un nuevo modelo
     mydb = conn_db.conectar()
     mycursor = mydb.cursor()
-    sql = "INSERT INTO modelos (flash_id, modelo) VALUES (%s, %s)"
-    val = (flash_id, modelo)
+    sql = "INSERT INTO modelos (flash_id, modelo, screen_size) VALUES (%s, %s,%s)"
+    val = (flash_id, modelo, screen_size)
     mycursor.execute(sql, val)
     mydb.commit()
     print(mycursor.rowcount, "Modelo insertado.")
@@ -46,16 +48,22 @@ def borrar_modelo(modelo): # Funcion para borrar un modelo
 def mostrar_modelos(): # Funcion para mostrar todos los modelos
     mydb = conn_db.conectar()
     mycursor = mydb.cursor()
-    mycursor.execute("SELECT flash_id, GROUP_CONCAT(modelo) as models FROM modelos GROUP BY flash_id ORDER BY flash_id")
+    #mycursor.execute("SELECT flash_id, GROUP_CONCAT(modelo) as models FROM modelos GROUP BY flash_id ORDER BY flash_id")
+    mycursor.execute("SELECT flash_id, GROUP_CONCAT(modelo SEPARATOR ' - ') as models FROM modelos GROUP BY flash_id ORDER BY flash_id")
     result = mycursor.fetchall()
     for row in result:
         print(row[0] + ' : ' + row[1])
     mydb.close()
     
-def mostrar_modelos_pd():
-    import pandas as pd
+def modelo_existe(modelo): #funcion para ver si el modelo ya existe en la basde de datos
     mydb = conn_db.conectar()
-    df = pd.read_sql_query("SELECT flash_id, GROUP_CONCAT(modelo) as models FROM modelos GROUP BY flash_id ORDER BY flash_id", mydb)
-    print(df)
+    mycursor = mydb.cursor()
+    sql = "SELECT modelo from modelos where modelo = %s"
+    val = (modelo,)
+    mycursor.execute(sql, val)
+    result = mycursor.fetchone()
     mydb.close()
-    
+    if result:
+        return True
+    else:
+        return False
