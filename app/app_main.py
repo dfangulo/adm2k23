@@ -98,3 +98,8 @@ def mostrar_modelos(): #Mostrar una lista de los modelos actuales
     
 def mostrar_flash_tools():# Mostar una lista de flashadores actuales
     flashtools.mostrar_flash_tools()
+    
+
+def agregar_nuevas_llaves():# Agregar llave o llaves a la base de datos
+    print('agregando llaves compradas para su uso')
+    
