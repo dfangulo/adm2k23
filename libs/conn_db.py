@@ -4,7 +4,7 @@ import mysql.connector
 def conectar():  # Crear una conexión a la base de datos
     mydb = mysql.connector.connect(
         #db produccion
-        host="curso-php.com",
+        host="oa3.lanix.com",
         user="oa3admin",
         password="Lanix2012$",
         database="oa3_db",
