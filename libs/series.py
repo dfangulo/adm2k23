@@ -1,8 +1,9 @@
-from libs import conn_db
+from libs.conn_db import conectar
 import datetime
 
+
 def agregar_dispositivo_serie(serie, windowsPkID, ordenDeProduccion):
-    mydb = conn_db.conectar()
+    mydb = conectar()
     mycursor = mydb.cursor()
     current_date = datetime.datetime.now()
     sql = "INSERT INTO series (serie, windowsPkID, ordenDeProduccion, fecha) VALUES (%s, %s, %s, %s)"
@@ -11,15 +12,17 @@ def agregar_dispositivo_serie(serie, windowsPkID, ordenDeProduccion):
     mydb.commit()
     print(mycursor.rowcount, "Numero de serie insertado.")
     mydb.close()
-    
-def listar_series_en_orden_produccion(ordenDeProduccion): #consultar las series en una orden de producción
+
+
+# consultar las series en una orden de producción
+def listar_series_en_orden_produccion(ordenDeProduccion):
     print('informacion en OP: ' + ordenDeProduccion)
-    result=[]
-    mydb = conn_db.conectar()
+    result = []
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "SELECT * FROM series WHERE ordenDeProduccion = %s"
     val = (ordenDeProduccion, )
-    mycursor.execute(sql,val)
+    mycursor.execute(sql, val)
     result = mycursor.fetchall()
     mydb.close()
     return result

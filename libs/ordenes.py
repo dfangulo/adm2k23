@@ -1,8 +1,8 @@
-from libs import conn_db
+from libs.conn_db import conectar
 
 
 def agregar_orden_produccion(ordenDeProduccion, modelo, cantidad):
-    mydb = conn_db.conectar()
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "INSERT INTO orden_produccion (ordenDeProduccion, modelo, cantidad) VALUES (%s, %s, %s)"
     val = (ordenDeProduccion, modelo, cantidad)
@@ -10,10 +10,10 @@ def agregar_orden_produccion(ordenDeProduccion, modelo, cantidad):
     mydb.commit()
     print(mycursor.rowcount, "Orden de produccion insertada.")
     mydb.close()
-    
+
 
 def orden_produccion_existe(ordenDeProduccion):
-    mydb = conn_db.conectar()
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "SELECT ordenDeProduccion FROM orden_produccion WHERE ordenDeProduccion = %s"
     val = (ordenDeProduccion,)
@@ -24,9 +24,11 @@ def orden_produccion_existe(ordenDeProduccion):
         return True
     else:
         return False
-    
-def modelo_orden_produccion(ordenDeProduccion): #Retornar el modelo de la orden de produccion
-    mydb = conn_db.conectar()
+
+
+# Retornar el modelo de la orden de produccion
+def modelo_orden_produccion(ordenDeProduccion):
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "SELECT modelo FROM orden_produccion WHERE ordenDeProduccion = %s"
     val = (ordenDeProduccion,)
@@ -35,9 +37,11 @@ def modelo_orden_produccion(ordenDeProduccion): #Retornar el modelo de la orden 
     mydb.close()
     return result[0]
 
-def consultar_orden_produccion(ordenDeProduccion): #consultar las series en una orden de producción
+
+# consultar las series en una orden de producción
+def consultar_orden_produccion(ordenDeProduccion):
     print('consultando la orden' + ordenDeProduccion)
-    mydb = conn_db.conectar()
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "SELECT * FROM orden_produccion WHERE ordenDeProduccion = %s"
     val = (ordenDeProduccion,)
@@ -46,9 +50,10 @@ def consultar_orden_produccion(ordenDeProduccion): #consultar las series en una 
     mydb.close()
     return result
 
-def listar_ordenes_produccion(): #lista de las ordenes en al base de datos
-    result=[]
-    mydb = conn_db.conectar()
+
+def listar_ordenes_produccion():  # lista de las ordenes en al base de datos
+    result = []
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "SELECT ordenDeProduccion FROM orden_produccion"
     mycursor.execute(sql)

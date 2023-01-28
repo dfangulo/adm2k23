@@ -1,26 +1,26 @@
-from app import app_menu
-from views import menu
+from app.app_menu import submenu_administrar, submenu_ayuda, submenu_busquedas, submenu_consultas, submenu_produccion
+from views.menu import menu_top, menu_opciones_principal, menu_bottom
 
 
 while True:
-    menu.menu_top()
-    menu.menu_opciones_principal()
-    opcion = menu.menu_bottom()
+    menu_top()
+    menu_opciones_principal()
+    opcion = menu_bottom()
     if opcion == '1':
         # Menu Produccion
-        app_menu.submenu_produccion()
+        submenu_produccion()
     elif opcion == '2':
         # Menu Administrar
-        app_menu.submenu_administrar()
+        submenu_administrar()
     elif opcion == '3':
         # Menu Consultas
-        app_menu.submenu_consultas()
+        submenu_consultas()
     elif opcion == '4':
         # Menu Busquedas
-        app_menu.submenu_busquedas()
+        submenu_busquedas()
     elif opcion == '5':
         # Menu Ayuda
-        app_menu.submenu_ayuda()
+        submenu_ayuda()
     elif opcion == 'q':
         break
     else:

@@ -1,9 +1,9 @@
-from libs import tools
+from libs.tools import clear_terminal
 import msvcrt
 
 
 def menu_top():
-    tools.clear_terminal()
+    clear_terminal()
     print("\n   Administracion OA3 ver:1.0-beta")
 
 

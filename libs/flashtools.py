@@ -1,6 +1,6 @@
 import os
 import shutil
-from libs import conn_db
+from libs.conn_db import conectar
 from smb.SMBConnection import SMBConnection
 
 # variables>
@@ -22,7 +22,7 @@ info_server = {
 
 # Funcion para agregar una nueva flash_tool
 def agregar_flash_tool(flash_id, nombre, ejecutable, ruta_folder, grabar_llave, borrar_llave):
-    mydb = conn_db.conectar()
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "INSERT INTO flash_tools (flash_id, nombre, ejecutable, ruta_folder, grabar_llave, borrar_llave) VALUES (%s, %s, %s, %s, %s, %s)"
     val = (flash_id, nombre, ejecutable,
@@ -42,7 +42,7 @@ def agregar_flashadores(lista):  # Funcion para agregar una lsita de flashadores
 
 
 def borrar_flash_tool(flash_id):  # Funcion para borrar una flash_tool
-    mydb = conn_db.conectar()
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "DELETE FROM flash_tools WHERE flash_id = %s"
     val = (flash_id,)
@@ -53,7 +53,7 @@ def borrar_flash_tool(flash_id):  # Funcion para borrar una flash_tool
 
 
 def mostrar_flash_tools():  # Funcion para mostrar todas las flash_tools
-    mydb = conn_db.conectar()
+    mydb = conectar()
     mycursor = mydb.cursor()
     mycursor.execute("SELECT flash_id, nombre FROM flash_tools")
     result = mycursor.fetchall()
@@ -62,18 +62,18 @@ def mostrar_flash_tools():  # Funcion para mostrar todas las flash_tools
     mydb.close()
 
 
-def mostrar_ultimo_flash_id(): # Funcion para obtener el ultimo flash_id
-    mydb = conn_db.conectar()
+def mostrar_ultimo_flash_id():  # Funcion para obtener el ultimo flash_id
+    mydb = conectar()
     mycursor = mydb.cursor()
     mycursor.execute("SELECT MAX(flash_id) FROM flash_tools")
     result = mycursor.fetchone()
-    #print(result[0])
+    # print(result[0])
     mydb.close()
     return result[0]
 
 
 def obtener_ruta_folder(flash_id):  # obtener el path de los flashadores
-    mydb = conn_db.conectar()
+    mydb = conectar()
     mycursor = mydb.cursor()
     # Consulta para obtener la ruta_folder del flash_id especificado
     query = f"SELECT ruta_folder FROM flash_tools WHERE flash_id='{flash_id}'"
@@ -84,7 +84,8 @@ def obtener_ruta_folder(flash_id):  # obtener el path de los flashadores
     return ruta_folder
 
 
-def copy_folder_to_server(new_folder): #Copiar folder de flashador local a servidor
+# Copiar folder de flashador local a servidor
+def copy_folder_to_server(new_folder):
     source_folder_path = info_local_files['flashtool_path'] + new_folder
     destination_folder_path = '\\\\' + \
         info_server['server']['ip'] + '\\' + \
@@ -117,7 +118,8 @@ def local_flashtool_folders():  # imprimir una lista de los flashadores en el fo
         print(folder)
 
 
-def local_files_flashtool(folder):# listar los archivos para selecionar el ejecutable
+# listar los archivos para selecionar el ejecutable
+def local_files_flashtool(folder):
     dir_path = info_local_files['flashtool_path'] + folder
     if os.path.exists(dir_path):
         files = [file for file in os.listdir(

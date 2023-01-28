@@ -1,4 +1,5 @@
-from libs import conn_db
+from libs.conn_db import conectar
+
 
 def importar_modelos(lista_modelos):
     for datos in lista_modelos:
@@ -8,11 +9,13 @@ def importar_modelos(lista_modelos):
             modelo_name = modelo_info[0]
             screen_size = modelo_info[1]
             agregar_modelo(flash_id, modelo_name, screen_size)
-            print(f"Modelo {modelo_name} con flash_id {flash_id} y tamaño de pantalla {screen_size} agregado.")
-            
+            print(
+                f"Modelo {modelo_name} con flash_id {flash_id} y tamaño de pantalla {screen_size} agregado.")
 
-def flash_id_desde_modelos(modelo): # Funcion para buscar un modelo y obtener el flash_id
-    mydb = conn_db.conectar()
+
+# Funcion para buscar un modelo y obtener el flash_id
+def flash_id_desde_modelos(modelo):
+    mydb = conectar()
     mycursor = mydb.cursor()
     # Consulta para obtener el flash_id del modelo especificado
     query = f"SELECT flash_id FROM modelos WHERE modelo='{modelo}'"
@@ -23,8 +26,8 @@ def flash_id_desde_modelos(modelo): # Funcion para buscar un modelo y obtener el
     return flash_id
 
 
-def agregar_modelo(flash_id, modelo, screen_size): # Funcion para agregar un nuevo modelo
-    mydb = conn_db.conectar()
+def agregar_modelo(flash_id, modelo, screen_size):  # Funcion para agregar un nuevo modelo
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "INSERT INTO modelos (flash_id, modelo, screen_size) VALUES (%s, %s,%s)"
     val = (flash_id, modelo, screen_size)
@@ -34,8 +37,8 @@ def agregar_modelo(flash_id, modelo, screen_size): # Funcion para agregar un nue
     mydb.close()
 
 
-def borrar_modelo(modelo): # Funcion para borrar un modelo
-    mydb = conn_db.conectar()
+def borrar_modelo(modelo):  # Funcion para borrar un modelo
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "DELETE FROM modelos WHERE modelo = %s"
     val = (modelo,)
@@ -45,18 +48,20 @@ def borrar_modelo(modelo): # Funcion para borrar un modelo
     mydb.close()
 
 
-def mostrar_modelos(): # Funcion para mostrar todos los modelos
-    mydb = conn_db.conectar()
+def mostrar_modelos():  # Funcion para mostrar todos los modelos
+    mydb = conectar()
     mycursor = mydb.cursor()
-    #mycursor.execute("SELECT flash_id, GROUP_CONCAT(modelo) as models FROM modelos GROUP BY flash_id ORDER BY flash_id")
-    mycursor.execute("SELECT flash_id, GROUP_CONCAT(modelo SEPARATOR ' - ') as models FROM modelos GROUP BY flash_id ORDER BY flash_id")
+    # mycursor.execute("SELECT flash_id, GROUP_CONCAT(modelo) as models FROM modelos GROUP BY flash_id ORDER BY flash_id")
+    mycursor.execute(
+        "SELECT flash_id, GROUP_CONCAT(modelo SEPARATOR ' - ') as models FROM modelos GROUP BY flash_id ORDER BY flash_id")
     result = mycursor.fetchall()
     for row in result:
         print(row[0] + ' : ' + row[1])
     mydb.close()
-    
-def modelo_existe(modelo): #funcion para ver si el modelo ya existe en la basde de datos
-    mydb = conn_db.conectar()
+
+
+def modelo_existe(modelo):  # funcion para ver si el modelo ya existe en la basde de datos
+    mydb = conectar()
     mycursor = mydb.cursor()
     sql = "SELECT modelo from modelos where modelo = %s"
     val = (modelo,)
