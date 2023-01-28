@@ -50,7 +50,7 @@ def submenu_consultas():
         menu_consultas()
         opcion = menu_bottom()
         if opcion == '1':
-            # Agregar Nuevas llaves a la base de datos
+            #Mostrar todas las series en lal base de datos
 
             pause()
         elif opcion == 'q':
@@ -66,7 +66,7 @@ def submenu_busquedas():
         menu_busquedas()
         opcion = menu_bottom()
         if opcion == '1':
-            # Agregar Nuevas llaves a la base de datos
+            # mostrar una salida con las llaves de una orden
 
             pause()
         elif opcion == 'q':
@@ -82,7 +82,7 @@ def submenu_ayuda():
         menu_ayuda()
         opcion = menu_bottom()
         if opcion == '1':
-            # Agregar Nuevas llaves a la base de datos
+            # Mostrar el menu de ayuda
 
             pause()
         elif opcion == 'q':
